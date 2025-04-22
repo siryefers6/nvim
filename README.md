@@ -76,13 +76,42 @@ git clone https://github.com/github/copilot.vim.git \
   ~/.config/nvim/pack/github/start/copilot.vim
 ```
 
-2. Ejecutar
+2. Instalar nvm (gestor de versiones de Node.js):
+
+Ejecuta este comando en tu terminal:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+```
+
+Ejecuta el siguiente comando para cargar nvm en tu terminal:
+```bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+```
+
+#### ✅ Verifica que se instaló bien:
+```bash
+nvm --version
+```
+
+---
+
+### 🚀 Ahora sí, instalá Node.js 20
+
+```bash
+nvm install 20
+nvm use 20
+nvm alias default 20  # Opcional: lo deja como default
+```
+
+3. Ejecutar (si es windows)
 
 ```bash
 wsl.exe --shutdown
 ```
 
-3. Abrir nvim y ejecutar el comando `:Copilot setup`
+4. Abrir nvim y ejecutar el comando `:Copilot setup`
 
-4. Copiar código y pegarlo en el navegador para autenticarte.
+5. Copiar código y pegarlo en el navegador para autenticarte.
 
