@@ -66,3 +66,23 @@ Aquí tienes los plugins esenciales:
      ```bash
      sudo apt install ripgrep
      ```
+
+### Instalar GitHub Copilot Neovim
+
+1. Descargar Copilot:
+
+```bash
+git clone https://github.com/github/copilot.vim.git \
+  ~/.config/nvim/pack/github/start/copilot.vim
+```
+
+2. Ejecutar
+
+```bash
+wsl.exe --shutdown
+```
+
+3. Abrir nvim y ejecutar el comando `:Copilot setup`
+
+4. Copiar código y pegarlo en el navegador para autenticarte.
+

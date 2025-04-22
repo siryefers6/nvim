@@ -50,7 +50,7 @@ return {
       settings = {
         python = {
           analysis = {
-            typeCheckingMode = "strict", -- Optional: Adjusts type-checking to strict mode
+            typeCheckingMode = "basic", -- Optional: Adjusts type-checking to strict mode
             autoSearchPaths = true,
             useLibraryCodeForTypes = true,
           },

@@ -79,6 +79,14 @@ function M.setup()
         luasnip.lsp_expand(args.body)
       end,
     },
+
+    -- Agregamos que el autocompletado se active automáticamente cuando se cambia el texto
+    completion = {
+      autocomplete = {
+        require("cmp.types").cmp.TriggerEvent.TextChanged,
+      },
+    },
+
     mapping = {
       ["<C-d>"] = cmp.mapping.scroll_docs(-4),
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -97,10 +105,11 @@ function M.setup()
         behavior = cmp.ConfirmBehavior.Insert,
         select = true,
       },
-      ["<c-space>"] = cmp.mapping.complete(),
+      ["<C-space>"] = cmp.mapping.complete(),
     },
     sources = {
       { name = "nvim_lsp" },
+      { name = "nvim_lsp_signature_help" },
       { name = "path" },
       { name = "luasnip" },
       { name = "buffer" },
