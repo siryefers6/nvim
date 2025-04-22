@@ -51,6 +51,25 @@ function M.setup()
       { name = "path" },                   -- Autocompletado de rutas del sistema
     }),
   })
+
+  -- 🔽 Autocompletado en línea de comandos ':'
+  cmp.setup.cmdline(":", {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = "path" }
+    }, {
+      { name = "cmdline" }
+    }),
+  })
+
+  -- 🔍 Autocompletado para búsquedas con '/'
+  cmp.setup.cmdline("/", {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = "buffer" }
+    }
+  })
+
 end
 
 return M
