@@ -15,6 +15,7 @@ return {
       vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
       local opts = { buffer = bufnr }
 
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Renombrar símbolo con LSP" })
       vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts, { desc = "Ir a definición" })
       vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts, { desc = "Ir a declaración" })
       vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts, { desc = "Ir a implementación" })

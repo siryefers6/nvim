@@ -1,63 +1,64 @@
 return {
   "nvim-telescope/telescope.nvim",
-  event = 'VeryLazy',
+  event = "VeryLazy",
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope-file-browser.nvim",
     {
-      'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'make'
-    } },
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "make",
+    },
+  },
   opts = {
     extensions = {
       fzf = {
-        fuzzy = true,                   -- false will only do exact matching
-        override_generic_sorter = true, -- override the generic sorter
-        override_file_sorter = true,    -- override the file sorter
-        case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
-        -- the default case_mode is "smart_case"
+        fuzzy = true,
+        override_generic_sorter = true,
+        override_file_sorter = true,
+        case_mode = "smart_case",
       },
-    }
+    },
   },
   config = function(opts)
-    require('telescope').setup(opts)
-    require('telescope').load_extension('fzf')
+    require("telescope").setup(opts)
+    require("telescope").load_extension("fzf")
+    require("telescope").load_extension("file_browser")
   end,
   keys = {
     {
       "<leader>pp",
       function()
-        require('telescope.builtin').git_files({ show_untracked = true })
+        require("telescope.builtin").git_files({ show_untracked = true })
       end,
-      desc = "Telescope Git Files",
+      desc = "Buscar archivos Git (incluye no rastreados)",
     },
     {
       "<leader>pe",
       function()
         require("telescope.builtin").buffers()
       end,
-      desc = "Telescope buffers",
+      desc = "Mostrar buffers abiertos",
     },
     {
       "<leader>gs",
       function()
         require("telescope.builtin").git_status()
       end,
-      desc = "Telescope Git status",
+      desc = "Ver estado Git",
     },
     {
       "<leader>gc",
       function()
         require("telescope.builtin").git_bcommits()
       end,
-      desc = "Telescope Git status",
+      desc = "Ver commits del buffer actual",
     },
     {
       "<leader>gb",
       function()
         require("telescope.builtin").git_branches()
       end,
-      desc = "Telescope Git branches",
+      desc = "Ver ramas de Git",
     },
     {
       "<leader>rp",
@@ -74,30 +75,49 @@ return {
               vim.cmd(string.format("edit ~/.config/nvim/lua/plugins/%s.lua", new_plugin))
             end)
             return true
-          end
+          end,
         })
-      end
+      end,
+      desc = "Buscar plugin en la carpeta de configuración",
     },
     {
       "<leader>pf",
       function()
-        require('telescope.builtin').find_files()
+        require("telescope.builtin").find_files()
       end,
-      desc = "Telescope Find Files",
+      desc = "Buscar archivos",
     },
     {
       "<leader>ph",
       function()
         require("telescope.builtin").help_tags()
       end,
-      desc = "Telescope Help"
+      desc = "Buscar en ayuda de Neovim",
     },
     {
       "<leader>bb",
       function()
-        require("telescope").extensions.file_browser.file_browser({ path = "%:h:p", select_buffer = true })
+        require("telescope").extensions.file_browser.file_browser({
+          path = "%:h:p",
+          select_buffer = true,
+        })
       end,
-      desc = "Telescope file browser"
-    }
+      desc = "Abrir explorador de archivos",
+    },
+    {
+      "<leader>ps",
+      function()
+        require("telescope.builtin").live_grep()
+      end,
+      desc = "Buscar texto en archivos (live grep)",
+    },
+    {
+      "<leader>pw",
+      function()
+        require("telescope.builtin").grep_string()
+      end,
+      desc = "Buscar palabra bajo el cursor (grep string)",
+    },
   },
 }
+
