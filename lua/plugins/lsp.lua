@@ -30,19 +30,10 @@ return {
         vim.lsp.buf.format { async = true }
       end, opts, { desc = "Formatear código" })
     end
-
-    -- 🚀 Configuración de Pyright (LSP para Python)
-    require("lspconfig").pyright.setup({
+    
+    -- 🚀 Configuración del servidor LSP para Kotlin
+    require("lspconfig").kotlin_language_server.setup({
       on_attach = on_attach,
-      settings = {
-        python = {
-          analysis = {
-            typeCheckingMode = "basic",      -- Usa "strict" si quieres análisis más riguroso
-            autoSearchPaths = true,
-            useLibraryCodeForTypes = true,
-          },
-        },
-      },
     })
   end
 }
