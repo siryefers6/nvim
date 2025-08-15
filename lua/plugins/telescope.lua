@@ -10,6 +10,34 @@ return {
     },
   },
   opts = {
+    defaults = {
+      file_ignore_patterns = {
+        "venv/",
+        "%.venv/",
+        "node_modules/",
+        "%.git/",
+        "__pycache__/",
+        "dist/",
+        "build/",
+      },
+      vimgrep_arguments = {
+        "rg",
+        "--color=never",
+        "--no-heading",
+        "--with-filename",
+        "--line-number",
+        "--column",
+        "--smart-case",
+        "--hidden",
+        "--glob=!venv/**",
+        "--glob=!.venv/**",
+        "--glob=!node_modules/**",
+        "--glob=!.git/**",
+        "--glob=!__pycache__/**",
+        "--glob=!dist/**",
+        "--glob=!build/**",
+      },
+    },
     extensions = {
       fzf = {
         fuzzy = true,
@@ -19,7 +47,7 @@ return {
       },
     },
   },
-  config = function(opts)
+  config = function(_, opts)
     require("telescope").setup(opts)
     require("telescope").load_extension("fzf")
     require("telescope").load_extension("file_browser")
