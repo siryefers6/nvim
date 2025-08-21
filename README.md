@@ -1,5 +1,21 @@
 ¡Claro! Para configurar **Neovim** con **Telescope**, **LSP** (Language Server Protocol) y **nvim-cmp** en un entorno Linux Ubuntu y trabajar con los lenguajes que mencionas, necesitas instalar las siguientes dependencias y configurarlas correctamente:
 
+## Instalar nvim 0.11
+
+# Instala asdf si no lo tienes:
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
+echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
+source ~/.bashrc
+
+# Instala el plugin de Neovim
+asdf plugin-add neovim
+asdf install neovim latest
+asdf global neovim latest
+
+# Verifica
+nvim --version
+
+
 ### Dependencias generales
 
 1. **Git**:
