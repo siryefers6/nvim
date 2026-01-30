@@ -3,9 +3,9 @@ return {
   "neovim/nvim-lspconfig",
   dependencies = {
     -- Mason para administrar LSPs
-    { "mason-org/mason.nvim" },
+    { "williamboman/mason.nvim" },
     -- Integración entre mason y lspconfig
-    { "mason-org/mason-lspconfig.nvim" },
+    { "williamboman/mason-lspconfig.nvim" },
     -- Autocompletado (recomendado si lo usas)
     { "hrsh7th/nvim-cmp" },
     { "hrsh7th/cmp-nvim-lsp" },
@@ -19,7 +19,7 @@ return {
 
     -- Opciones de mason-lspconfig si lo tienes activo
     require("mason-lspconfig").setup({
-      ensure_installed = { "pyright" }, -- servidores a instalar automáticamente
+      ensure_installed = { "pyright", "ts_ls", "lua_ls" }, -- servidores a instalar automáticamente
       automatic_installation = true,
     })
 
@@ -48,8 +48,11 @@ return {
       end, opts, { desc = "Formatear código" })
     end
 
-    -- Configuración de Pyright usando la nueva API
-    vim.lsp.config.setup("pyright", {
+    -- Configuración de los LSP servers
+    local lspconfig = require('lspconfig')
+    
+    -- Pyright (Python)
+    lspconfig.pyright.setup({
       on_attach = on_attach,
       capabilities = capabilities,
       settings = {
@@ -58,6 +61,32 @@ return {
             typeCheckingMode = "basic",
             autoSearchPaths = true,
             useLibraryCodeForTypes = true,
+          },
+        },
+      },
+    })
+    
+    -- TypeScript/JavaScript
+    lspconfig.ts_ls.setup({
+      on_attach = on_attach,
+      capabilities = capabilities,
+    })
+    
+    -- Lua Language Server
+    lspconfig.lua_ls.setup({
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { 'vim' },
+          },
+          workspace = {
+            library = vim.api.nvim_get_runtime_file("", true),
+            checkThirdParty = false,
+          },
+          telemetry = {
+            enable = false,
           },
         },
       },
