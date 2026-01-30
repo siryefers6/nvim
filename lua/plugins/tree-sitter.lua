@@ -12,6 +12,10 @@ return {
       "lua",
       "luadoc",
       "query",
+      "python",
+      "typescript",
+      "javascript",
+      "tsx",
     },
     highlight = {
       enable = true,

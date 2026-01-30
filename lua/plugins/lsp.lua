@@ -3,9 +3,9 @@ return {
   "neovim/nvim-lspconfig",
   dependencies = {
     -- Mason para administrar LSPs
-    { "mason-org/mason.nvim" },
+    { "williamboman/mason.nvim" },
     -- Integración entre mason y lspconfig
-    { "mason-org/mason-lspconfig.nvim" },
+    { "williamboman/mason-lspconfig.nvim" },
     -- Autocompletado (recomendado si lo usas)
     { "hrsh7th/nvim-cmp" },
     { "hrsh7th/cmp-nvim-lsp" },
@@ -19,7 +19,7 @@ return {
 
     -- Opciones de mason-lspconfig si lo tienes activo
     require("mason-lspconfig").setup({
-      ensure_installed = { "pyright" }, -- servidores a instalar automáticamente
+      ensure_installed = { "pyright", "ts_ls", "lua_ls" }, -- servidores a instalar automáticamente
       automatic_installation = true,
     })
 
@@ -29,27 +29,30 @@ return {
     vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Diagnóstico siguiente" })
     vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, { desc = "Lista de diagnósticos" })
 
-    -- Función on_attach para Pyright
+    -- Función on_attach compartida para todos los LSP servers
     local on_attach = function(_, bufnr)
       vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
       local opts = { buffer = bufnr }
 
-      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts, { desc = "Renombrar símbolo LSP" })
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts, { desc = "Ir a definición" })
-      vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts, { desc = "Ir a declaración" })
-      vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts, { desc = "Ir a implementación" })
-      vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts, { desc = "Buscar referencias" })
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts, { desc = "Mostrar documentación" })
-      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts, { desc = "Ayuda de firma" })
-      vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts, { desc = "Acción de código" })
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Renombrar símbolo LSP" }))
+      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Ir a definición" }))
+      vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Ir a declaración" }))
+      vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Ir a implementación" }))
+      vim.keymap.set('n', 'gr', vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "Buscar referencias" }))
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Mostrar documentación" }))
+      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, vim.tbl_extend("force", opts, { desc = "Ayuda de firma" }))
+      vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Acción de código" }))
 
       vim.keymap.set('n', '<space>f', function()
         vim.lsp.buf.format { async = true }
-      end, opts, { desc = "Formatear código" })
+      end, vim.tbl_extend("force", opts, { desc = "Formatear código" }))
     end
 
-    -- Configuración de Pyright usando la nueva API
-    vim.lsp.config.setup("pyright", {
+    -- Configuración de los LSP servers
+    local lspconfig = require('lspconfig')
+    
+    -- Pyright (Python)
+    lspconfig.pyright.setup({
       on_attach = on_attach,
       capabilities = capabilities,
       settings = {
@@ -58,6 +61,32 @@ return {
             typeCheckingMode = "basic",
             autoSearchPaths = true,
             useLibraryCodeForTypes = true,
+          },
+        },
+      },
+    })
+    
+    -- TypeScript/JavaScript
+    lspconfig.ts_ls.setup({
+      on_attach = on_attach,
+      capabilities = capabilities,
+    })
+    
+    -- Lua Language Server
+    lspconfig.lua_ls.setup({
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { 'vim' },
+          },
+          workspace = {
+            library = { vim.env.VIMRUNTIME },
+            checkThirdParty = false,
+          },
+          telemetry = {
+            enable = false,
           },
         },
       },
