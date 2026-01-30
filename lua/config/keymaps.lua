@@ -1,24 +1,44 @@
--- Guardar archivo con doble líder
-vim.keymap.set('n', '<leader><leader>w', ':w<cr>', {desc = "Guardar archivo" })
+-- General keymaps
 
--- Salir del archivo con doble líder
-vim.keymap.set('n', '<leader><leader>q', ':q<cr>', {desc = "Salir del archivo" })
+-- Better window navigation
+vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = "Ir a ventana izquierda" })
+vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = "Ir a ventana abajo" })
+vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = "Ir a ventana arriba" })
+vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = "Ir a ventana derecha" })
 
--- Refrescar configuración de Neovim
-vim.keymap.set('', '<leader>rr', ':source %<cr>', {desc = "Refrescar configuración de Neovim" })
+-- Resize windows
+vim.keymap.set('n', '<C-Up>', ':resize +2<CR>', { desc = "Aumentar altura" })
+vim.keymap.set('n', '<C-Down>', ':resize -2<CR>', { desc = "Disminuir altura" })
+vim.keymap.set('n', '<C-Left>', ':vertical resize -2<CR>', { desc = "Disminuir ancho" })
+vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', { desc = "Aumentar ancho" })
 
--- Ir al siguiente resultado de la búsqueda y centrar el cursor
-vim.keymap.set('n', 'n', 'nzzzv', { desc = "Ir al siguiente resultado de la búsqueda y centrar el cursor" })
+-- Buffer navigation
+vim.keymap.set('n', '<S-l>', ':bnext<CR>', { desc = "Siguiente buffer" })
+vim.keymap.set('n', '<S-h>', ':bprevious<CR>', { desc = "Buffer anterior" })
+vim.keymap.set('n', '<leader>bd', ':bdelete<CR>', { desc = "Cerrar buffer" })
 
--- Ir al resultado anterior de la búsqueda y centrar el cursor
-vim.keymap.set('n', 'N', 'Nzzzv', { desc = "Ir al resultado anterior de la búsqueda y centrar el cursor" })
+-- Save and quit shortcuts
+vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = "Guardar archivo" })
+vim.keymap.set('n', '<leader>q', ':q<CR>', { desc = "Salir" })
+vim.keymap.set('n', '<leader>Q', ':qa!<CR>', { desc = "Salir sin guardar" })
 
--- Cambiar entre paneles creados con vsplit (izquierda)
-vim.keymap.set('n', '<leader><leader>h', '<C-w>h', { desc = "Cambiar al panel izquierdo" })
+-- Better indenting in visual mode
+vim.keymap.set('v', '<', '<gv', { desc = "Indentar izquierda" })
+vim.keymap.set('v', '>', '>gv', { desc = "Indentar derecha" })
 
--- Cambiar entre paneles creados con vsplit (derecha)
-vim.keymap.set('n', '<leader><leader>l', '<C-w>l', { desc = "Cambiar al panel derecho" })
+-- Move text up and down
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = "Mover texto abajo" })
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = "Mover texto arriba" })
 
--- Volver al buffer anterior
-vim.keymap.set('n', '<leader><leader>b', ':buffer #<cr>', { desc = "Volver al buffer anterior" })
+-- Keep cursor centered when scrolling
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = "Scroll down centrado" })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = "Scroll up centrado" })
+vim.keymap.set('n', 'n', 'nzzzv', { desc = "Siguiente búsqueda centrado" })
+vim.keymap.set('n', 'N', 'Nzzzv', { desc = "Búsqueda anterior centrado" })
+
+-- Clear search highlighting
+vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>', { desc = "Limpiar resaltado de búsqueda" })
+
+-- Reload configuration
+vim.keymap.set('n', '<leader>rr', ':source $MYVIMRC<CR>', { desc = "Recargar configuración" })
 
