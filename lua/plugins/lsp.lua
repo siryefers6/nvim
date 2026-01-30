@@ -11,15 +11,15 @@ return {
     { "hrsh7th/cmp-nvim-lsp" },
   },
   config = function()
-    --  1. Habilitar capacidades para nvim-cmp + LSP
+    -- 1. Habilitar capacidades para nvim-cmp + LSP
     local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-    --  2. Opciones de Mason
+    -- 2. Opciones de Mason
     require("mason").setup()
 
-    --  Opciones de mason-lspconfig si lo tienes activo
+    -- Opciones de mason-lspconfig si lo tienes activo
     require("mason-lspconfig").setup({
-      ensure_installed = { "pyright" },  -- servidores a instalar automáticamente
+      ensure_installed = { "pyright" }, -- servidores a instalar automáticamente
       automatic_installation = true,
     })
 
@@ -48,8 +48,8 @@ return {
       end, opts, { desc = "Formatear código" })
     end
 
-    -- Configuración de Pyright
-    require("lspconfig").pyright.setup({
+    -- Configuración de Pyright usando la nueva API
+    vim.lsp.config.setup("pyright", {
       on_attach = on_attach,
       capabilities = capabilities,
       settings = {
@@ -64,4 +64,3 @@ return {
     })
   end,
 }
-
