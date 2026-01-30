@@ -5,7 +5,7 @@ vim.g.maplocalleader = " "
 -- General settings
 vim.opt.number = true              -- Show line numbers
 vim.opt.relativenumber = true      -- Show relative line numbers
-vim.opt.mouse = "a"                -- Enable mouse support
+vim.opt.mouse = ""                 -- Disable mouse support (keep keyboard-focused workflow)
 vim.opt.termguicolors = true       -- True color support
 vim.opt.clipboard = "unnamedplus"  -- Use system clipboard
 vim.opt.ignorecase = true          -- Ignore case in search

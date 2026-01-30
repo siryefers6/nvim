@@ -54,6 +54,8 @@ return {
             ["il"] = "@loop.inner",
             ["aa"] = "@parameter.outer",
             ["ia"] = "@parameter.inner",
+            ["ao"] = "@conditional.outer",
+            ["io"] = "@conditional.inner",
           },
         },
         move = {

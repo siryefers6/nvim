@@ -5,11 +5,14 @@ local luasnip = require("luasnip")
 local M = {}
 
 function M.setup()
-  -- Load VSCode-style snippets
+  -- Load VSCode-style snippets from friendly-snippets
   require("luasnip.loaders.from_vscode").lazy_load()
 
-  -- Load snippets from friendly-snippets
-  require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
+  -- Load custom snippets from config directory if they exist
+  local custom_snippets_path = vim.fn.stdpath("config") .. "/snippets"
+  if vim.fn.isdirectory(custom_snippets_path) == 1 then
+    require("luasnip.loaders.from_vscode").lazy_load({ paths = { custom_snippets_path } })
+  end
 
   -- Autopairs integration
   local cmp_autopairs = require("nvim-autopairs.completion.cmp")
