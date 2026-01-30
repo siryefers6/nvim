@@ -5,25 +5,36 @@ local luasnip = require("luasnip")
 local M = {}
 
 function M.setup()
-  -- Cargar snippets de VSCode (friendly-snippets o tu propia colección de snippets)
+  -- Load VSCode-style snippets from friendly-snippets
   require("luasnip.loaders.from_vscode").lazy_load()
 
-  -- Integración con autopairs
+  -- Load custom snippets from config directory if they exist
+  local custom_snippets_path = vim.fn.stdpath("config") .. "/snippets"
+  if vim.fn.isdirectory(custom_snippets_path) == 1 then
+    require("luasnip.loaders.from_vscode").lazy_load({ paths = { custom_snippets_path } })
+  end
+
+  -- Autopairs integration
   local cmp_autopairs = require("nvim-autopairs.completion.cmp")
   cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
-  -- Configuración principal de CMP
+  -- CMP setup
   cmp.setup({
     snippet = {
       expand = function(args)
-        luasnip.lsp_expand(args.body)  -- Expande snippets
+        luasnip.lsp_expand(args.body)
       end,
     },
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
     mapping = cmp.mapping.preset.insert({
-      ["<C-b>"] = cmp.mapping.scroll_docs(-4, { desc = "Scroll arriba en documentación" }),
-      ["<C-f>"] = cmp.mapping.scroll_docs(4, { desc = "Scroll abajo en documentación" }),
-      ["<C-Space>"] = cmp.mapping.complete({ desc = "Forzar autocompletado" }),
-      ["<CR>"] = cmp.mapping.confirm({ select = true }, { desc = "Confirmar selección" }),
+      ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+      ["<C-f>"] = cmp.mapping.scroll_docs(4),
+      ["<C-Space>"] = cmp.mapping.complete(),
+      ["<C-e>"] = cmp.mapping.abort(),
+      ["<CR>"] = cmp.mapping.confirm({ select = true }),
       ["<Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
@@ -32,7 +43,7 @@ function M.setup()
         else
           fallback()
         end
-      end, { "i", "s", desc = "Siguiente sugerencia o salto de snippet" }),
+      end, { "i", "s" }),
       ["<S-Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item()
@@ -41,18 +52,68 @@ function M.setup()
         else
           fallback()
         end
-      end, { "i", "s", desc = "Sugerencia anterior o retroceso de snippet" }),
+      end, { "i", "s" }),
     }),
     sources = cmp.config.sources({
-      { name = "nvim_lsp" },               -- Fuente principal: LSP (para Python, Pyright, por ejemplo)
-      { name = "nvim_lsp_signature_help" },-- Mostrar ayuda de firma de funciones
-      { name = "luasnip" },                -- Snippets con luasnip
-      { name = "buffer" },                 -- Palabras del buffer actual
-      { name = "path" },                   -- Autocompletado de rutas del sistema
+      { name = "nvim_lsp", priority = 1000 },
+      { name = "luasnip", priority = 750 },
+      { name = "buffer", priority = 500 },
+      { name = "path", priority = 250 },
     }),
+    formatting = {
+      fields = { "kind", "abbr", "menu" },
+      format = function(entry, vim_item)
+        local kind_icons = {
+          Text = "󰉿",
+          Method = "󰆧",
+          Function = "󰊕",
+          Constructor = "",
+          Field = "󰜢",
+          Variable = "󰀫",
+          Class = "󰠱",
+          Interface = "",
+          Module = "",
+          Property = "󰜢",
+          Unit = "󰑭",
+          Value = "󰎠",
+          Enum = "",
+          Keyword = "󰌋",
+          Snippet = "",
+          Color = "󰏘",
+          File = "󰈙",
+          Reference = "󰈇",
+          Folder = "󰉋",
+          EnumMember = "",
+          Constant = "󰏿",
+          Struct = "󰙅",
+          Event = "",
+          Operator = "󰆕",
+          TypeParameter = "",
+        }
+        vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
+        vim_item.menu = ({
+          nvim_lsp = "[LSP]",
+          luasnip = "[Snippet]",
+          buffer = "[Buffer]",
+          path = "[Path]",
+        })[entry.source.name]
+        return vim_item
+      end
+    },
+    experimental = {
+      ghost_text = true,
+    },
   })
 
-  -- 🔽 Autocompletado en línea de comandos ':'
+  -- Cmdline setup for '/'
+  cmp.setup.cmdline("/", {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = "buffer" }
+    }
+  })
+
+  -- Cmdline setup for ':'
   cmp.setup.cmdline(":", {
     mapping = cmp.mapping.preset.cmdline(),
     sources = cmp.config.sources({
@@ -61,15 +122,6 @@ function M.setup()
       { name = "cmdline" }
     }),
   })
-
-  -- 🔍 Autocompletado para búsquedas con '/'
-  cmp.setup.cmdline("/", {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = "buffer" }
-    }
-  })
-
 end
 
 return M
